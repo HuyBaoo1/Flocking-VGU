@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<argos-configuration>
+
+  <framework>
+    <system threads="0" />
+    <experiment length="0" ticks_per_second="10" random_seed="124" />
+  </framework>
+
+  <controllers>
+    <footbot_flocking_controller id="ffc" library="build/controllers/footbot_flocking/libfootbot_flocking">
+      <actuators>
+        <differential_steering implementation="default" />
+        <leds implementation="default" medium="leds" />
+      </actuators>
+      <sensors>
+        <footbot_light implementation="rot_z_only" show_rays="true" />
+        <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
+      </sensors>
+      <params>
+        <wheel_turning hard_turn_angle_threshold="90" soft_turn_angle_threshold="70" no_turn_angle_threshold="10" max_speed="10" />
+        <flocking target_distance="50" gain="900" exponent="2" />
+      </params>
+    </footbot_flocking_controller>
+  </controllers>
+
+  <arena size="30,30,1" center="0,0,0.5">
+    <light id="light" position="8.9,2.7,0.5" orientation="0,0,0" color="yellow" intensity="3.0" medium="leds" />
+    
+    <distribute>
+      <position method="uniform" min="4,4,0" max="5,5,0" />
+      <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
+      <entity quantity="20" max_trials="100">
+        <foot-bot id="fb" omnidirectional_camera_aperture="80">
+          <controller config="ffc" />
+        </foot-bot>
+      </entity>
+    </distribute>
+  </arena>
+
+  <physics_engines>
+    <dynamics2d id="dyn2d" />
+  </physics_engines>
+
+  <media>
+    <led id="leds" />
+  </media>
+
+  <visualization>
+    <qt-opengl>
+      <camera>
+        <placements>
+          <placement index="0" position="3.47,8.20,3.42" look_at="3.94,7.55,2.82" up="0.34,-0.48,0.80" lens_focal_length="20" />
+        </placements>
+      </camera>
+    </qt-opengl>
+  </visualization>
+
+</argos-configuration>
